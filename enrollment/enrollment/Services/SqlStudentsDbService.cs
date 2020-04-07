@@ -42,6 +42,24 @@ namespace enrollment.Services
             return "OK";
         }
 
+        public string CheckStudentIndex(string index)
+        {
+            using (var client = new SqlConnection("Data Source=db-mssql;Initial Catalog=s18508;Integrated Security=True"))
+            using (var com = new SqlCommand())
+            {
+                com.Connection = client;
+                client.Open();
+                com.CommandText = "select * from student where IndexNumber=@index";
+                com.Parameters.AddWithValue("index", index);
+                var dr = com.ExecuteReader();
+                if (!dr.Read()) //jesli brak rekrdow zwroci info o braku studiow
+                {
+                    return null;
+                }
+                else return index;
+            }
+        }
+
         public string PromoteStudent(Enrollment en)
         {
             using (var client = new SqlConnection("Data Source=db-mssql;Initial Catalog=s18508;Integrated Security=True"))

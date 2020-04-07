@@ -1,0 +1,21 @@
+Metoda: GET
+Sciezka: /weatherforecast
+QueryString: 
+Body: 
+Metoda: GET
+Sciezka: /favicon.ico
+QueryString: 
+Body: 
+Metoda: POST
+Sciezka: /api/enrollments/ind=s170
+QueryString: 
+Body: {
+	"IndexNumber": "s1234", 
+	"FirstName": "Andrzej", 
+	"LastName": "Malewski", 
+	"BirthDate": "12/01/2019",
+	"Studies": "PJWSTK" ,
+	"Semester": 1
+	
+}
+
