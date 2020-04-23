@@ -13,5 +13,6 @@ namespace enrollment.Models
         public string BirthDate { get; set; }
         public string Studies { get; set; }
         public int Semester { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace enrollment.Services
         public string PromoteStudent(Enrollment en);
         public string EnrollStudent(Student stud);
         public string CheckStudentIndex(string index);
+        public bool CheckLoginData(LoginRequest log);
     }
 }

@@ -85,6 +85,29 @@ namespace enrollment.Services
             }
             return "OK";
         }
+
+        public bool CheckLoginData(LoginRequest log)
+        {
+            using (var client = new SqlConnection("Data Source=db-mssql;Initial Catalog=s18508;Integrated Security=True"))
+            using (var com = new SqlCommand())
+            {
+                com.Connection = client;
+                client.Open();
+                com.CommandText = "select IndexNumber , haslo from Student where IndexNumber=@index AND haslo=@haslo";
+                com.Parameters.AddWithValue("index", log.login);
+                com.Parameters.AddWithValue("haslo", log.haslo);
+                var dr = com.ExecuteReader();
+                if (!dr.Read()) // jesli brak rekordow to zla autoryzacja
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+
+            }
+        }
     }
     
 }

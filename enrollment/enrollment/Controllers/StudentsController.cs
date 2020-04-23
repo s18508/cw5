@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using enrollment.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace enrollment.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/students")]
     public class StudentsController : ControllerBase
     {
+        
         [HttpGet]
         public IActionResult GetStudents()
         {

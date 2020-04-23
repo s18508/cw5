@@ -14,6 +14,11 @@ using enrollment.Services;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Http;
 using enrollment.Middlewares;
+using Microsoft.AspNetCore.Authentication;
+using enrollment.Handlers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace enrollment
 {
@@ -26,11 +31,32 @@ namespace enrollment
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+       
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IStudentsDbService, SqlStudentsDbService>();
             services.AddTransient<IStudentsDbService, SqlStudentsDbService>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = "gakko",
+                        ValidAudience = "students",
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"]))
+
+
+
+                    };
+                });
+                    
+
+            //services.AddAuthentication("AuthBasic")
+            //    .AddScheme<AuthenticationSchemeOptions, AppAutHandler>("AuthBasic", null);
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -55,6 +81,7 @@ namespace enrollment
             app.UseMiddleware<LoggingMiddleware>();
             app.Use(async (context, next) =>
             {
+                /*
                 if (!context.Request.Headers.ContainsKey("Index"))
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -68,11 +95,13 @@ namespace enrollment
                     await context.Response.WriteAsync("Nie ma podanego indeksu w bazie");
                     return;
                 }
+                */
                 await next();
             });
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
